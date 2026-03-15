@@ -5,7 +5,7 @@ function setup() {
 }
 
 function draw() {
-    background("#379838");
+    background("#1e541f");
     for (let i = 0; i < plants.length; i++) {
         plants[i].grow();
         plants[i].display();
@@ -33,7 +33,7 @@ class Plant {
     }
 
     display() {
-         stroke(this.color);
+    stroke(this.color);
     strokeWeight(2);
 
     // stem
