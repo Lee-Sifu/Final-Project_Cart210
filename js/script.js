@@ -5,7 +5,7 @@ function setup() {
 }
 
 function draw() {
-    background("#87ceeb");
+    background("#379838");
     for (let i = 0; i < plants.length; i++) {
         plants[i].grow();
         plants[i].display();
