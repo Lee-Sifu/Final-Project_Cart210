@@ -28,7 +28,8 @@ class Plant {
 
     grow() {
         if (this.size < this.maxSize) {
-            this.size += 0.5;
+            this.size += 0.02;
+            this.size = constrain(this.size, 0, this.maxSize);
         }
     }
 
