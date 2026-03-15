@@ -33,8 +33,15 @@ class Plant {
     }
 
     display() {
-        fill(this.color);
-        noStroke();
-        ellipse(this.x, this.y, this.size, this.size);
-    }
+         stroke(this.color);
+    strokeWeight(2);
+
+    // stem
+    line(this.x, this.y, this.x, this.y - this.size);
+
+    // flower
+    noStroke();
+    fill(this.color);
+    circle(this.x, this.y - this.size, this.size/2);
+  }
 }
