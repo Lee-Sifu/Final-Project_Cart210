@@ -8,12 +8,12 @@ function setup() {
 function draw() {
     background("#1e541f");
     for (let i = 0; i < plants.length; i++) {
-        plants[i].grow();
-        plants[i].display();  
+        plants[i].plantGrow();
+        plants[i].plantDisplay();  
     }
     for (let i = 0; i < trees.length; i++) {
-        trees[i].treegrow();
-        trees[i].treedisplay();
+        trees[i].treeGrow();
+        trees[i].treeDisplay();
     }
 }
 
@@ -35,14 +35,14 @@ class Plant {
     this.color = color(random(100,255), random(150,255), random(100,255));
   }
 
-    grow() {
+    plantGrow() {
         if (this.size < this.maxSize) {
             this.size += 0.02;
             this.size = constrain(this.size, 0, this.maxSize);
         }
     }
 
-    display() {
+    plantDisplay() {
     stroke(this.color);
     strokeWeight(2);
 
@@ -64,13 +64,13 @@ class Tree {
     this.maxSize = random(50, 150);
     this.color = color(random(50,150), random(100,200), random(50,150));
   }
-  treegrow() {
+  treeGrow() {
     if (this.size < this.maxSize) {
         this.size += 0.02;
         this.size = constrain(this.size, 0, this.maxSize);
     }
 }
-    treedisplay() {
+    treeDisplay() {
     stroke(this.color);
     strokeWeight(4);
     // trunk
@@ -79,5 +79,5 @@ class Tree {
     noStroke();
     fill(this.color);
     circle(this.x, this.y - this.size, this.size);
-  }
+  } 
 }
