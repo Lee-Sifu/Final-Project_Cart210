@@ -14,7 +14,8 @@ function draw() {
     noStroke();
     textAlign(CENTER, CENTER);
     textSize(18);
-    text("Click to plant Every 8th click grows a tree ", width / 2, height / 2);
+    text("Click to plant", width / 2, height / 2);
+    text("Every 8 plants grows a tree!", width / 2, height / 2 + 30);
   }
  
   for (let i = plants.length - 1; i >= 0; i--) {
