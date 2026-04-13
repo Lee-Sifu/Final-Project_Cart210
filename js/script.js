@@ -274,12 +274,31 @@ class Plant {
     this.x = x;
     this.y = y;
     this.size = 1;
-    this.maxSize      = random(6, 22);
-    this.col          = color(random(100, 255), random(180, 255), random(80, 160));
+    this.maxSize      = random(14, 28);   // a bit taller so flowers read clearly
     this.alpha        = 255;
     this.fullyGrown   = false;
-    this.baseFadeRate = random(5, 10); // short-lived sparks
+    this.baseFadeRate = random(5, 10);
     this.fadeRate     = this.baseFadeRate;
+
+    // Flower anatomy
+    this.numPetals   = floor(random(4, 9));      // 4–8 petals
+    this.petalOffset = random(TWO_PI);           // random rotation so no two look alike
+    this.petalW      = random(0.28, 0.45);       // petal width as fraction of head size
+    this.petalL      = random(0.55, 0.85);       // petal length as fraction of head size
+
+    // Pick a random flower palette: pink, purple, red, yellow, orange, white, blue
+    const palettes = [
+      { petal: [255, random(80,160),  random(140,200)], center: [255, 220, 50]  }, // pink
+      { petal: [random(140,200), random(60,120), 255],  center: [255, 240, 80]  }, // purple
+      { petal: [255, random(40,90),   random(60,100)],  center: [255, 200, 40]  }, // red
+      { petal: [255, random(210,245), random(40,90)],   center: [200, 120, 20]  }, // yellow
+      { petal: [255, random(130,175), random(30,70)],   center: [180, 80,  10]  }, // orange
+      { petal: [random(220,255), random(225,255), 255], center: [255, 230, 80]  }, // white-blue
+      { petal: [random(100,170), random(180,230), 255], center: [255, 240, 100] }, // cornflower
+    ];
+    let p = random(palettes);
+    this.petalCol  = p.petal;
+    this.centerCol = p.center;
   }
 
   plantGrow() {
@@ -297,13 +316,57 @@ class Plant {
   isDead() { return this.alpha <= 0; }
 
   plantDisplay() {
-    let c = color(red(this.col), green(this.col), blue(this.col), this.alpha);
-    stroke(c);
+    let a = this.alpha;
+
+    // — Stem —
+    stroke(60, 130, 55, a);
     strokeWeight(1.5);
     line(this.x, this.y, this.x, this.y - this.size);
+
+    // Only draw the flower head once it has some size
+    if (this.size < 4) return;
+
+    let headX  = this.x;
+    let headY  = this.y - this.size;
+    let head   = this.size * 0.65;  // overall flower-head radius
+    let pW     = head * this.petalW;
+    let pL     = head * this.petalL;
+    let [pr, pg, pb] = this.petalCol;
+    let [cr, cg, cb] = this.centerCol;
+
+    push();
+    translate(headX, headY);
+
+    // — Petals —
     noStroke();
-    fill(c);
-    circle(this.x, this.y - this.size, this.size / 2);
+    fill(pr, pg, pb, a);
+    for (let i = 0; i < this.numPetals; i++) {
+      let angle = (TWO_PI / this.numPetals) * i + this.petalOffset;
+      push();
+      rotate(angle);
+      ellipse(0, -(head * 0.35 + pL * 0.4), pW, pL);
+      pop();
+    }
+
+    // — Petal inner highlight (lighter tint at tips) —
+    fill(pr + 40, pg + 40, pb + 40, a * 0.45);
+    for (let i = 0; i < this.numPetals; i++) {
+      let angle = (TWO_PI / this.numPetals) * i + this.petalOffset;
+      push();
+      rotate(angle);
+      ellipse(0, -(head * 0.35 + pL * 0.55), pW * 0.45, pL * 0.5);
+      pop();
+    }
+
+    // — Centre disc —
+    fill(cr, cg, cb, a);
+    circle(0, 0, head * 0.62);
+
+    // — Centre shadow ring —
+    fill(cr * 0.7, cg * 0.7, cb * 0.3, a * 0.55);
+    circle(0, 0, head * 0.38);
+
+    pop();
   }
 }
 
